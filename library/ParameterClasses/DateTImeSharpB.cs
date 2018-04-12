@@ -92,7 +92,11 @@ namespace ParameterClasses
                 if (PropertyMapping.ContainsKey(name)) {
                     foreach (string property in PropertyMapping[name]) {
                         if (input.Properties[property] != null && input.Properties[property].Value != null) {
-                            try { return new DateTimeSharpB(input.Properties[property].Value).Value; }
+                            try { return (DateTime)input.Properties[property].Value; }
+                            catch { }
+                            try { return (DateTime)((PSObject)input.Properties[property].Value).BaseObject; }
+                            catch { }
+                            try { return new DateTimeSharpC(input.Properties[property].Value).Value; }
                             catch { }
                         }
                     }

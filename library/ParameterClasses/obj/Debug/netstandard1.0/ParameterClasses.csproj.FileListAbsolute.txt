@@ -1,0 +1,3 @@
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\bin\Debug\netstandard1.0\ParameterClasses.deps.json
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard1.0\ParameterClasses.csprojResolveAssemblyReference.cache
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard1.0\ParameterClasses.AssemblyInfo.cs

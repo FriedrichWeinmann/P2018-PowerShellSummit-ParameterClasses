@@ -12,3 +12,11 @@ a) Discuss design & purpose question
 6. Add Extensibility mechanism
 7. Example: PSCustomObject
 #>
+
+<#
+Section 2) The world of C#
+# 1. Show issues in using PowerShell
+2. Parameter class converted
+3. Add InFuture property
+4. Add operators
+#>

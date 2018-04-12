@@ -1,6 +1,6 @@
 Set-Content -Path $profile.CurrentUserCurrentHost -Value @'
 #TODO: Update path before presentation
-$presentationRoot = "F:\Code\Github\P2018-PowerShellSummit-ParameterClasses"
+$presentationRoot = "D:\Code\Github\P2018-PowerShellSummit-ParameterClasses"
 
 $temp = Get-PSFConfigValue -FullName psutil.path.temp
 $null = New-Item -Path $temp -Name demo -ItemType Directory -Force -ErrorAction Ignore
@@ -17,7 +17,7 @@ Set-PSFTypeAlias -AliasName "DateTimeSharpB" -TypeName "ParameterClasses.DateTim
 Set-PSFTypeAlias -AliasName "DateTimeSharpC" -TypeName "ParameterClasses.DateTimeSharpC"
 '@
 #TODO: Update path before presentation
-$presentationRoot = "F:\Code\Github\P2018-PowerShellSummit-ParameterClasses"
+$presentationRoot = "D:\Code\Github\P2018-PowerShellSummit-ParameterClasses"
 
 $temp = Get-PSFConfigValue -FullName psutil.path.temp
 $null = New-Item -Path $temp -Name demo -ItemType Directory -Force -ErrorAction Ignore

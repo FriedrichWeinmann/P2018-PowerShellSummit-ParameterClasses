@@ -95,7 +95,7 @@ namespace ParameterClasses
             return result;
         }
 
-        private static DateTime ProcessObject(object Value)
+        public static DateTime ProcessObject(object Value)
         {
             PSObject input = new PSObject(Value);
 
@@ -107,6 +107,12 @@ namespace ParameterClasses
                     {
                         if (input.Properties[property] != null && input.Properties[property].Value != null)
                         {
+                            try { return (DateTime)input.Properties[property].Value; }
+                            catch { }
+
+                            try { return (DateTime)((PSObject)input.Properties[property].Value).BaseObject; }
+                            catch { }
+
                             try { return new DateTimeSharpC(input.Properties[property].Value).Value; }
                             catch { }
                         }

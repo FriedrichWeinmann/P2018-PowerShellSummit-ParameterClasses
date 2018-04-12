@@ -7,3 +7,12 @@ F:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\
 F:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard2.0\ParameterClasses.AssemblyInfo.cs
 F:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard2.0\ParameterClasses.dll
 F:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard2.0\ParameterClasses.pdb
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\bin\Debug\netstandard2.0\ParameterClasses.deps.json
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\bin\Debug\netstandard2.0\ParameterClasses.dll
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\bin\Debug\netstandard2.0\ParameterClasses.pdb
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard2.0\ParameterClasses.csprojResolveAssemblyReference.cache
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard2.0\ParameterClasses.csproj.CoreCompileInputs.cache
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard2.0\ParameterClasses.AssemblyInfoInputs.cache
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard2.0\ParameterClasses.AssemblyInfo.cs
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard2.0\ParameterClasses.dll
+D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\library\ParameterClasses\obj\Debug\netstandard2.0\ParameterClasses.pdb

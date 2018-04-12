@@ -13,13 +13,15 @@ class DateTimeParamA {
         $this.Value = $Value
     }
 }
+
 function Get-Test {
     [CmdletBinding()]
     param (
         [DateTimeParamA]$Timestamp
     )
-    $Timestamp.Value
+    $Timestamp
 }
+
 Get-Test -Timestamp (Get-Date)
 
 # 2. Adding second constructor
@@ -49,6 +51,7 @@ class DateTimeParamB {
         throw "Could not parse input!"
     }
 }
+
 function Get-Test {
     [CmdletBinding()]
     param (
@@ -56,8 +59,16 @@ function Get-Test {
     )
     $Timestamp.Value
 }
+
 Get-Test -Timestamp (Get-Date)
 Get-Test -Timestamp (Get-Date).ToString()
+
+# --> Finally parity with plain DateTime parameter type!
+
+<#
+Customary DateTime use as parameter:
+Get-MessageTrackingLog -Start (Get-Date).AddDays(-3)
+#>
 
 # b) Adding user convenience
 class DateTimeParamC {
@@ -82,8 +93,11 @@ class DateTimeParamC {
         try { return [DateTime]::Parse($Value, [System.Globalization.CultureInfo]::InvariantCulture) }
         catch { }
 
+        # Check for negative values
         [bool]$positive = -not $Value.Contains('-')
         [string]$tempValue = $Value.Replace("-", "").Trim()
+
+        # Check whether the start of day (date) should be selected instead 
         [bool]$date = $tempValue -like "D *"
         if ($date) { $tempValue = $tempValue.Substring(2) }
 
@@ -112,6 +126,7 @@ class DateTimeParamC {
             else { throw "Failed to parse as timespan: $Value at $element" }
         }
 
+        # Add calculated timespan
         [DateTime]$result = [DateTime]::MinValue
         if (-not $positive) { $result = [DateTime]::Now.Add($timeResult.Negate()) }
         else { $result = [DateTime]::Now.Add($timeResult) }
@@ -120,17 +135,23 @@ class DateTimeParamC {
         return $result
     }
 }
+
 function Get-Test {
     [CmdletBinding()]
     param (
         [DateTimeParamC]$Timestamp
     )
-    $Timestamp.Value
+    $Timestamp
 }
+
 Get-Test -Timestamp (Get-Date)
 Get-Test -Timestamp "1d 8h"
+
+Get-Test -Timestamp (Get-Date).AddHours(-8).AddMinutes(-30)
 Get-Test -Timestamp "-8h 30m"
+
 Get-Test -Timestamp "D -8h 30m"
+Get-Test -Timestamp "0"
 
 # 3. Passing along the input
 class DateTimeParamD {
@@ -196,6 +217,7 @@ class DateTimeParamD {
         return $result
     }
 }
+
 function Get-Test {
     [CmdletBinding()]
     param (
@@ -203,6 +225,7 @@ function Get-Test {
     )
     $Timestamp
 }
+
 Get-Test -Timestamp (Get-Date).AddHours(-8).AddMinutes(-30)
 Get-Test -Timestamp "-8h 30m"
 
@@ -375,8 +398,8 @@ function Get-Test {
     )
     Write-Host "It is now $Timestamp"
 }
-Get-Item F:\Code\Github\P2018-PowerShellSummit-ParameterClasses\powershell\presentation.ps1 | ft Name, LastWriteTime
-Get-Test -Timestamp (Get-Item F:\Code\Github\P2018-PowerShellSummit-ParameterClasses\powershell\presentation.ps1)
+Get-Item "$presentationRoot\powershell\presentation.ps1" | ft Name, LastWriteTime
+Get-Test -Timestamp (Get-Item "$presentationRoot\powershell\presentation.ps1")
 
 # A good idea?
 
@@ -470,7 +493,6 @@ class DateTimeParamG {
         return $this.Value.ToString()
     }
 }
-[DateTimeParamG]::PropertyMapping["System.IO.FileSystemInfo"] = @("LastWriteTime")
 function Get-Test {
     [CmdletBinding()]
     param (
@@ -478,7 +500,8 @@ function Get-Test {
     )
     Write-Host "It is now $Timestamp"
 }
-Get-Test -Timestamp (Get-Item F:\Code\Github\P2018-PowerShellSummit-ParameterClasses\powershell\presentation.ps1)
+[DateTimeParamG]::PropertyMapping["System.IO.FileSystemInfo"] = @("LastWriteTime")
+Get-Test -Timestamp (Get-Item "$presentationRoot\powershell\presentation.ps1")
 
 # 7. Custom Design
 $obj = [PSCustomObject]@{
@@ -498,6 +521,7 @@ Get-Test -Timestamp $obj
  #                       Chapter 2: It's a Sharp world                        # 
  #----------------------------------------------------------------------------# 
 
+# 1. Troubled Waters
 Start-RSJob -ScriptBlock {
     function Get-Test {
         [CmdletBinding()]
@@ -506,7 +530,7 @@ Start-RSJob -ScriptBlock {
         )
         Write-Host "It is now $Timestamp"
     }
-    Get-Test -Timestamp (Get-Item F:\Code\Github\P2018-PowerShellSummit-ParameterClasses\powershell\presentation.ps1)
+    Get-Test -Timestamp (Get-Item D:\Code\Github\P2018-PowerShellSummit-ParameterClasses\powershell\presentation.ps1)
 }
 Get-RSJob | Receive-RSJob
 Get-RSJob | Remove-RSJob
@@ -522,8 +546,10 @@ C# benefits:
 - ...
 #>
 
+# 2. Translating Code
 # --> Compare the code
-code "$presentationRoot\PowerShell\DateTimeSharpA.cs"
+code "$presentationRoot\C#\DateTimeSharpA.cs"
+code "$presentationRoot\powershell\parameterclass.ps1"
 
 function Get-Test {
     [CmdletBinding()]
@@ -541,22 +567,44 @@ function Get-SharpTest {
 }
 
 # Teach the C# class our awesome new object
-#[DateTimeSharpA]::PropertyMapping["Foo.Bar"] = @("TimeStamp")
-#TODO: Debug Parameter Class!
+[DateTimeSharpA]::PropertyMapping["Foo.Bar"] = @("TimeStamp")
 Get-Test -Timestamp $obj
 Get-SharpTest -Timestamp $obj
 
-<#
-Section 2) The world of C#
-# 1. Show issues in using PowerShell
-2. Parameter class converted
-3. Add InFuture property
-4. Add operators
-#>
+# 3. The Need for Speed
+Measure-PSMDCommandEx -ScriptBlock { Get-Test -Timestamp $obj } -Iterations 1000
+Measure-PSMDCommandEx -ScriptBlock { Get-SharpTest -Timestamp $obj } -Iterations 1000
+
+# 4. Adding Knowledge
+code "$presentationRoot\C#\DateTimeSharpB.cs"
+function Get-SharpTest {
+    [CmdletBinding()]
+    param (
+        [DateTimeSharpB]$Timestamp
+    )
+    $Timestamp
+}
+Get-SharpTest -Timestamp "2d"
+Get-SharpTest -Timestamp "-2d"
+
+# 5. Cheating the type system
+code "$presentationRoot\C#\DateTimeSharpC.cs"
+function Get-SharpTest {
+    [CmdletBinding()]
+    param (
+        [DateTimeSharpC]$Timestamp
+    )
+    $Timestamp
+}
+$object = Get-SharpTest -Timestamp "-2d 3h 15m 52s"
+$object
+(Get-Date) -gt $object
+Get-Date -Date $object
+
 
 <#
 Addendum:
 1) The design philosophy
-2) The contract attributes
-3) PSFramework Parameter classes
+2) PSFramework Parameter classes
+3) The contract attributes
 #>
